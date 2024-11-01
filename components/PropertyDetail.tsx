@@ -123,18 +123,20 @@ const PropertyDetail = () => {
       {/* Image Slider */}
       <Box sx={{ width: "100%", maxWidth: "1000px", margin: "0 auto" }}>
         <Button sx={{margin:"10px auto"}} variant="contained" onClick={()=>router.back()} >Back</Button>
-        <Slider {...settings} style={{width:'100%'}} ref={sliderRef}>
-          {post?.photos?.map((photo: any, index: any) => (
-            <img
-              key={index}
-              src={`${imageURL}/${id}/${photo.picture}`}
-              alt={`Property image ${index + 1}`}
-              width={1000}
-              height={500}
-              style={{ borderRadius: "8px", objectFit: "cover" }}
-            />
-          ))}
-        </Slider>
+        <Box style={{ width: '100%' }}>
+          <Slider {...settings} ref={sliderRef}>
+            {post?.photos?.map((photo: any, index: any) => (
+              <img
+                key={index}
+                src={`${imageURL}/${id}/${photo.picture}`}
+                alt={`Property image ${index + 1}`}
+                width={1000}
+                height={500}
+                style={{ borderRadius: "8px", objectFit: "cover" }}
+              />
+            ))}
+          </Slider>
+        </Box>
         {/* Navigation Arrows */}
         <Box sx={{ display: "flex", justifyContent: "space-between", paddingTop: "1rem" }}>
           <Typography component={'span'}  onClick={() => sliderRef.current?.slickPrev()} 
