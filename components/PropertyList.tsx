@@ -28,12 +28,13 @@ photos: Photo[];
 shops?: number;
 beds?: number;
 rooms?: number;
+sizes?: number;
 toilets?: number;
 bathrooms?: number;
 safety?: string[];
 amenities?: object[];
 features?: object[];
-hostedBy: HostedBy;
+// hostedBy: HostedBy;
 createdAt: string;
 }
 function PropertyList({posts, currentPage, totalPages}:{posts: any, currentPage: number, totalPages: number}) {
@@ -169,7 +170,7 @@ function PropertyList({posts, currentPage, totalPages}:{posts: any, currentPage:
                           fontWeight: "400 !important",
                         }}
                       >
-                        26M
+                        {property.sizes} SQM
                         {/* {Math.floor(Math.random() * 10) + 20}M */}
                       </Typography>
                     </Stack>
