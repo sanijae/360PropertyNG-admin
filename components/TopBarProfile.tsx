@@ -58,7 +58,6 @@ function TopBarProfile({ setMode, admin, loading }: IProps) {
       alert(error.message)
     }
   }
-  // console.log(admin);
 
   if (loading) return <Typography>Loading...</Typography>;
 
@@ -75,7 +74,7 @@ function TopBarProfile({ setMode, admin, loading }: IProps) {
         // @ts-ignore
         color="textPrimary"
       >
-        {admin?.imageUrl ? <Avatar alt={admin?.name} src={`${adminImageURL}/${admin?._id}/${admin?.imageUrl}`}  />
+        {admin?.imageUrl ? <img alt={admin?.name} src={admin?.imageUrl} width={40} height={40} style={{borderRadius:'50%'}}  />
         :<Avatar />}
 
         <Stack

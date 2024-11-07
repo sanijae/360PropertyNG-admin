@@ -29,8 +29,9 @@ export default function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   const router = useRouter()
 
-  const noLayoutRoutes = ['/login'];
+  const noLayoutRoutes = ['/login', '/forget-password', '/forget-password/update-password/[token]'];
   const isLayoutVisible = !noLayoutRoutes.includes(router.pathname);
+
 
   const theme = React.useMemo(
     // @ts-ignore

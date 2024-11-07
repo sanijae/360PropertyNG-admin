@@ -5,7 +5,7 @@ import {
   PropertyList,
   PropertyListFilter,
 } from "components";
-import { Stack } from "@mui/material";
+import { Alert, Stack } from "@mui/material";
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from "react";
 import { useRouter } from "next/router";
@@ -27,6 +27,9 @@ export default function Property() {
     window.document.title = "360PropertyNG - Properties"
   }, [dispatch, page]);
   
+  if(!posts){
+    return <Alert>Fetching properties...</Alert>
+  }
   return (
     <PageContainer title="Property List">
       <Stack

@@ -48,7 +48,7 @@ export default function Agent() {
         {agents.map((agent: Agents, index: any) => (
           <AgentDetails 
           key={`agent-${index}`}
-          image={undefined} 
+          image={agent.imageUrl} 
           name={agent.name}
           phone={agent.phone} 
           address={agent.address} 

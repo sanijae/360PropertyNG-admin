@@ -34,7 +34,6 @@ function TopBar({ setMode }: IProps) {
     setMobileOpen((prevState) => !prevState);
   };
 
-  // console.log("admin: ",currentAdmin);
   return (
     <Box>
       <AppBar

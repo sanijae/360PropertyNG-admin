@@ -46,9 +46,9 @@ function PropertyListFilter() {
     const fetchData = async () => {
       try {
         const [citiesRes, typesRes, categoriesRes] = await Promise.all([
-          api.get("/Property/post/cities"),
-          api.get("/Property/post/types"),
-          api.get("/Property/post/categories"),
+          api.get("/Property/cities"),
+          api.get("/Property/types"),
+          api.get("/Property/categories"),
         ]);
         setAllData({
           cities: citiesRes.data.cities,
@@ -85,7 +85,6 @@ function PropertyListFilter() {
           });
         });
   
-      console.log(query);
     } catch (err: any) {
       setError(err.message);
     }

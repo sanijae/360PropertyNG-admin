@@ -25,25 +25,28 @@ interface Column {
   format?: (value: number) => string;
 }
 
-const columns: readonly Column[] = [
-  { id: 'profile', label: 'Profile', minWidth: 100},
-  { id: 'name', label: 'Name', minWidth: 100 },
-  { id: 'email', label: 'Email', minWidth: 100, align:"right"},
-  { id: 'action', label: 'Action', minWidth: 100, align:"right"},
-];
-
-
 
 export default function Users() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch: AppDispatch = useDispatch()
   const {users, loading, error} = useSelector((state:RootState)=>state.users)
+  const {currentAdmin} = useSelector((state:RootState)=>state.admins)
   const [filterUsers, setUsers] = React.useState<any[]>([])
   const [userId, setUserId] = React.useState<any>(null);
   const [openDialog, setOpenDialog] = React.useState(false);
+  const [message,setMessage] = React.useState('')
 
 
+  const columns: readonly Column[] = [
+    { id: 'profile', label: 'Profile', minWidth: 100},
+    { id: 'name', label: 'Name', minWidth: 100 },
+    { id: 'email', label: 'Email', minWidth: 100, align:"right"},
+    ...currentAdmin?.role === 'super-admin' ?
+      [ { id: 'action', label: 'Action', minWidth: 100, align:"right"} as Column]
+      : []
+  ];
+  
 
   React.useEffect(() =>{
       dispatch(fetchUsers())
@@ -53,6 +56,7 @@ export default function Users() {
   React.useEffect(() =>{
     const fUsers = users.filter((user) => user.isVerified === false )
     setUsers(fUsers)
+    setMessage('')
   },[users])
   
   if (loading) return <p>Loading...</p>;
@@ -79,16 +83,18 @@ export default function Users() {
   const handleDelete = (id: any) =>{
     dispatch(deleteUser(id))
     .unwrap()
-    .then(()=>{
+    .then((res)=>{
       setOpenDialog(false);
       dispatch(fetchUsers());
+      setMessage(res.result);
     })
-    .catch((err) => <Alert>{err.message}</Alert>);
+    .catch((err) =>console.log(err)); //<Alert>{err.message}</Alert>);
   }
 
   return (
     <PageContainer title=' All Users'>
       <TableContainer sx={{ maxHeight: 440 }}>
+        {message && <Alert>{message}</Alert>}
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -110,7 +116,8 @@ export default function Users() {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={i}>
                     <TableCell>
-                      {user.imageUrl ? <Image width={40} height={40} src={user.imageUrl} alt='Profile' style={{borderRadius:'50%', objectFit:"cover"}} />
+                      {user.imageUrl ? 
+                      <img width={40} height={40} src={user.imageUrl} alt='Profile' style={{borderRadius:'50%', objectFit:"cover"}} />
                       : <Avatar/>}
                     </TableCell>
                     <TableCell>
@@ -119,11 +126,12 @@ export default function Users() {
                     <TableCell sx={{minWidth: 170, textAlign: 'right',}}>
                       {user.email}
                     </TableCell>
+                    {currentAdmin?.role === 'super-admin' &&
                     <TableCell sx={{minWidth: 170, textAlign: 'right',}}>
                         <IconButton aria-label="delete" size="small" onClick={()=>handleClickOpen(user)}>
                           <Delete fontSize="inherit" />
                         </IconButton>
-                    </TableCell>
+                    </TableCell>}
                   </TableRow>
                 );
               })}

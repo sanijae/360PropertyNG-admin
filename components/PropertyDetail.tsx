@@ -28,9 +28,6 @@ interface HostedBy{
     phone: number;
     imageUrl?: null;
 }
-interface Photo {
-    picture: string;
-  }
 
 interface Post {
     _id: string;
@@ -47,9 +44,11 @@ interface Post {
     duration?: string;
     negotiable?: string;
     availability?: string;
-    photos: Photo[];
+    photos: string;
     shops?: number;
+    offices?: number;
     beds?: number;
+    sizes?: number;
     rooms?: number;
     toilets?: number;
     bathrooms?: number;
@@ -73,7 +72,7 @@ const PropertyDetail = () => {
 
   useEffect(() => {
     const fetchPost = async() => {
-        await api.get(`/Property/post/${id}`)
+        await api.get(`/Property/${id}`)
             .then((res) => res.data)
             .then((data) => {
                 setPost(data.result)
@@ -105,7 +104,7 @@ const PropertyDetail = () => {
 }
   
 
-  if (!post) return <Typography>Loading property details...</Typography>;
+  if (!post) return <Alert>Loading property details...</Alert>;
 
   const settings = {
     dots: true,
@@ -128,7 +127,7 @@ const PropertyDetail = () => {
             {post?.photos?.map((photo: any, index: any) => (
               <img
                 key={index}
-                src={`${imageURL}/${id}/${photo.picture}`}
+                src={photo}
                 alt={`Property image ${index + 1}`}
                 width={1000}
                 height={500}
@@ -172,9 +171,21 @@ const PropertyDetail = () => {
       <hr/>
       {/* Pricing and Availability */}
       <Box sx={{padding:'2rem'}}>
+       {post?.price &&
         <Typography variant="h5" fontWeight="bold">
           Price: &#8358;{pricesConverter.format( post?.price)}
         </Typography>
+        }
+        {post?.minPrice &&
+        <Typography variant="h5" fontWeight="bold">
+          Min: &#8358;{pricesConverter.format( post?.minPrice)}
+        </Typography>
+        }
+        {post?.maxPrice &&
+        <Typography variant="h5" fontWeight="bold">
+          Max: &#8358;{pricesConverter.format( post?.maxPrice)}
+        </Typography>
+        }
         <Typography variant="body2" color="textSecondary">
           Negotiable: {post?.negotiable || "No"}
         </Typography>
@@ -209,6 +220,16 @@ const PropertyDetail = () => {
         {post?.shops && (
           <Grid item xs={6}>
             <Typography>Shops: {post?.shops}</Typography>
+          </Grid>
+        )}
+        {post?.offices && (
+          <Grid item xs={6}>
+            <Typography>Shops: {post?.offices}</Typography>
+          </Grid>
+        )}
+        {post?.sizes && (
+          <Grid item xs={6}>
+            <Typography>Size: {post?.sizes} SQM</Typography>
           </Grid>
         )}
       </Grid>
@@ -275,16 +296,16 @@ const PropertyDetail = () => {
               marginRight: '1.5rem',
             }}
           >
-            {agent?.imageUrl.trim() !== "" ? (
+            {agent?.imageUrl ? (
               <img
-                src={`${agentImageURL}/${agent?._id}/${agent?.imageUrl}`}
+                src={agent?.imageUrl}
                 width={100}
                 height={200}
                 alt="avat"
                 style={{ objectFit: 'cover', height: '100%' }}
                 />
             ) : (
-              <Avatar alt='done' sx={{ objectFit: 'cover', width: '100%', height: '100%' }}
+              <Avatar sx={{ objectFit: 'cover', width: '100%', height: '100%' }}
               />
             )}
           </Box>

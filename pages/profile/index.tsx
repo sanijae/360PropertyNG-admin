@@ -9,6 +9,7 @@ import { fetchAdminProfile } from "lib/features/admins/adminsSlices";
 export default function Profile() {
   const {currentAdmin} = useSelector((state: RootState)=>state.admins)
   const dispatch: AppDispatch = useDispatch()
+  
 
   useEffect(()=>{
     dispatch(fetchAdminProfile())

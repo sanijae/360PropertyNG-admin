@@ -128,7 +128,7 @@ function ProfileCard({ admin }: any) {
         >
           {admin?.imageUrl ?
           <img
-            src={`${adminImageURL}/${admin?._id}/${admin?.imageUrl}`}
+            src={admin?.imageUrl}
             width={30}
             height={20}
             style={{ width: "5rem", height: "5rem", borderRadius: "50%" }}

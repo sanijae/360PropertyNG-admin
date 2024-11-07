@@ -22,6 +22,7 @@
     "@types/react-dom": "18.0.11",
     "axios": "^1.7.7",
     "chart.js": "^4.2.1",
+    "js-cookie": "^3.0.5",
     "next": "13.2.3",
     "prop-types": "^15.8.1",
     "react": "18.2.0",
@@ -36,6 +37,7 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
     "@types/react-slick": "^0.23.13",
     "react-slick": "^0.30.2"
   }

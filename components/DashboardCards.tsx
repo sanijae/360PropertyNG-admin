@@ -3,6 +3,18 @@ import { Stack, Typography, Box, CircularProgress } from "@mui/material";
 import api from "utils/api";
 // import { dashboardCards as cards } from "utils/data";
 
+
+interface Agent {
+  id: string;
+  _id: string;
+  name: string;
+  email: string;
+  address: string;
+  imageUrl: string;
+  title: string;
+  phone: number;
+  isVerified: boolean;
+}
 interface ICardProps {
   title: string;
   color: string;
@@ -37,27 +49,28 @@ export const dashboardCards = [
 ];
 
 function DashboardCards() {
+  const [agents, setAgents] = useState<Agent[]>([])
   const [allData, setAllData] = useState({
     cities: [],
     rent: [],
     sell: [],
-    users: 0,
+    users: [],
   });
   
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [citiesRes, sellRes, rentRes, usersRes] = await Promise.all([
-          api.get("/Property/post/cities"),
-          api.get("/Property/post/category/Sell"),
-          api.get("/Property/post/category/Rent"),
+          api.get("/Property/cities"),
+          api.get("/Property/category/Sell"),
+          api.get("/Property/category/Rent"),
           api.get("/User/"),
         ]);
         setAllData({
           cities: citiesRes.data.cities,
           sell: sellRes.data.result,
           rent: rentRes.data.result,
-          users: usersRes.data.count,
+          users: usersRes.data.result,
         });
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -65,8 +78,12 @@ function DashboardCards() {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const verifiedAgents = allData.users.filter((user:Agent) => user.isVerified);
+    setAgents(verifiedAgents);
+  }, [allData.users]);
   
-  // console.log(allData);
   
   const cards = [
     {
@@ -82,8 +99,8 @@ function DashboardCards() {
       progress: 61,
     },
     {
-      title: "Total Customer",
-      value: allData?.users !== 0 ? allData?.users : 33222,
+      title: "Total Agents",
+      value: agents.length !== 0 ? agents.length : 33222,
       color: "#2ED480",
       progress: 82,
     },

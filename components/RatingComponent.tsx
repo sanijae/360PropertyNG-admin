@@ -3,11 +3,12 @@ import { Stack, Typography, Button, Box, Alert,
   Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle
  } from "@mui/material";
 import { Download } from "@mui/icons-material";
-import { AppDispatch } from "lib/store";
-import { useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "lib/store";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteNotification, fetchNotifications } from "lib/features/notifications/notificationSlices";
-import { useState } from "react";
-import { updateUser } from "lib/features/users/userSlices";
+import { useEffect, useState } from "react";
+import { fetchUser, updateUser } from "lib/features/users/userSlices";
+import { licenseImageURL } from "utils/api";
 
 
 function formatDate(dateString: string | number | Date) {
@@ -25,7 +26,7 @@ function RatingComponent({ title, message, sender, _id, createdAt }: any) {
   const [openDeleteDialog, setOpenDelete] = useState(false);
   const [openApprovedDialog, setOpenApproved] = useState(false);
   const [isError, setIsError] = useState('')
-
+  // const [senderId, setSenderId] = useState('')
   
   const handleClickOpenDelete = () => {
     setOpenDelete(true);
@@ -43,15 +44,33 @@ function RatingComponent({ title, message, sender, _id, createdAt }: any) {
     setOpenApproved(false);
   };
 
-  const handleDownload = async()=>{
+  const handleDownload = async () => {
     try {
-      console.log('downloaded');
-      
+        const user = await dispatch(fetchUser(sender._id)).unwrap();
+        const fileUrl = user.result?.license;
+        if (!fileUrl) {
+            throw new Error('No license URL found');
+        }
+
+        const response = await fetch(fileUrl);
+        const blob = await response.blob();
+
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = `${user.result?.email}-${fileUrl.split('/').pop()}`;  
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        window.URL.revokeObjectURL(downloadUrl);
     } catch (error: any) {
-      console.log(error.message);
-      
+        setIsError(error.message || 'Failed to download the license');
     }
-  }
+};
+
+  
+
   const handleReject = async () => {
     try {
       await dispatch(deleteNotification(_id)).unwrap();

@@ -5,10 +5,9 @@ import ZoomOutMapIcon from "@mui/icons-material/ZoomOutMap";
 import { imageURL } from "utils/api";
 import Paginations from "./CustomPagination";
 import Link from "next/link";
+import { BathroomOutlined, FolderCopyOutlined, RoomServiceOutlined, Shop2Outlined, SquareFootOutlined } from "@mui/icons-material";
 
-interface Photo {
-  picture: string;
-}
+
 interface Post {
 _id: string;
 name: string;
@@ -19,13 +18,14 @@ city?: string;
 state?: string;
 address?: string;
 price: number;
-minPrice?: string;
-maxPrice?: string;
+minPrice?: number;
+maxPrice?: number;
 duration?: string;
 negotiable?: string;
 availability?: string;
-photos: Photo[];
+photos: string;
 shops?: number;
+offices?: number;
 beds?: number;
 rooms?: number;
 sizes?: number;
@@ -78,7 +78,7 @@ function PropertyList({posts, currentPage, totalPages}:{posts: any, currentPage:
                   }}
                 >
                   <img
-                    src={`${imageURL}/${property._id}/${property.photos[0]?.picture}`}
+                    src={property.photos[0]}
                     alt={property.name}
                     width={300}
                     height={200}
@@ -109,16 +109,44 @@ function PropertyList({posts, currentPage, totalPages}:{posts: any, currentPage:
                       width: "fit-content",
                     }}
                   >
+                  {property.price &&
+                  <Typography
+                    component="span"
+                    sx={{
+                      fontSize: "0.75rem !important",
+                      color: "orange",
+                      fontWeight: 600,
+                    }}
+                  >
+                    &#8358;{pricesConverter.format(property.price)}
+                  </Typography>
+                  }
+                    {property.minPrice &&
                     <Typography
                       component="span"
                       sx={{
                         fontSize: "0.75rem !important",
-                        color: "primary.main",
+                        color: "orange",
                         fontWeight: 600,
+                        marginLeft:'10px',
                       }}
                     >
-                      &#8358;{pricesConverter.format(property.price)}
+                      Min: &#8358;{pricesConverter.format(property.minPrice)}
                     </Typography>
+                    }
+                    {property.maxPrice &&
+                    <Typography
+                      component="span"
+                      sx={{
+                        fontSize: "0.75rem !important",
+                        color: "orange",
+                        fontWeight: 600,
+                        marginLeft:'10px',
+                      }}
+                    >
+                      Max: &#8358;{pricesConverter.format(property.maxPrice)}
+                    </Typography>
+                    }
                   </Box>
 
                   <Stack spacing="0.375rem">
@@ -137,42 +165,93 @@ function PropertyList({posts, currentPage, totalPages}:{posts: any, currentPage:
                       direction="row"
                       spacing="0.25rem"
                       color="textSecondary.main"
+                      width={"100%"}
+                      justifyContent={'space-between'}
                     >
-                      <BedOutlinedIcon
-                        sx={{ width: "1.125rem", height: "1.125rem" }}
-                      />
+                      {property.beds &&
                       <Typography
                         sx={{
                           fontSize: "0.75rem !important",
                           fontWeight: "400 !important",
+                          display:'inline-flex',
+                          alignItems:'center'
                         }}
                       >
+                        <BedOutlinedIcon
+                          sx={{ width: "1.125rem", height: "1.125rem", color:'orange', marginRight:'2px' }}
+                        />
                         {property.beds} bedrooms
-                        {/* {Math.floor(Math.random() * 3) + 3} Beds */}
-                      </Typography>
-                    </Stack>
-
-                    <Stack
-                      direction="row"
-                      spacing="0.25rem"
-                      color="textSecondary.main"
-                    >
-                      <ZoomOutMapIcon
-                        sx={{
-                          width: "1.125rem",
-                          height: "1.125rem",
-                          transform: "rotate(45deg)",
-                        }}
-                      />
+                      </Typography>}
+                      {property.rooms &&
                       <Typography
                         sx={{
                           fontSize: "0.75rem !important",
                           fontWeight: "400 !important",
+                          display:'inline-flex',
+                          alignItems:'center'
                         }}
                       >
+                        <RoomServiceOutlined
+                          sx={{ width: "1.125rem", height: "1.125rem", color:'orange', marginRight:'2px' }}
+                        />
+                        {property.rooms} rooms
+                      </Typography>}
+                      {property.toilets &&
+                      <Typography
+                        sx={{
+                          fontSize: "0.75rem !important",
+                          fontWeight: "400 !important",
+                          display:'inline-flex',
+                          alignItems:'center'
+                        }}
+                      >
+                        <BathroomOutlined
+                          sx={{ width: "1.125rem", height: "1.125rem", color:'orange', marginRight:'2px' }}
+                        />
+                        {property.toilets} toilets
+                      </Typography>}
+                      {property.sizes &&
+                      <Typography
+                        sx={{
+                          fontSize: "0.75rem !important",
+                          fontWeight: "400 !important",
+                          display:'inline-flex',
+                          alignItems:'center'
+                        }}
+                      >
+                        <SquareFootOutlined
+                          sx={{ width: "1.125rem", height: "1.125rem", color:'orange', marginRight:'2px' }}
+                        />
                         {property.sizes} SQM
-                        {/* {Math.floor(Math.random() * 10) + 20}M */}
-                      </Typography>
+                      </Typography>}
+                      {property.shops &&
+                      <Typography
+                        sx={{
+                          fontSize: "0.75rem !important",
+                          fontWeight: "400 !important",
+                          display:'inline-flex',
+                          alignItems:'center'
+                        }}
+                      >
+                        <Shop2Outlined
+                          sx={{ width: "1.125rem", height: "1.125rem", color:'orange', marginRight:'2px' }}
+                        />
+                        {property.shops} shops
+                      </Typography>}
+                      {property.offices &&
+                      <Typography
+                        sx={{
+                          fontSize: "0.75rem !important",
+                          fontWeight: "400 !important",
+                          display:'inline-flex',
+                          alignItems:'center'
+                        }}
+                      >
+                        <FolderCopyOutlined
+                          sx={{ width: "1.125rem", height: "1.125rem", color:'orange', marginRight:'2px' }}
+                        />
+                        {property.offices} offices
+                      </Typography>}
                     </Stack>
                   </Stack>
                 </Stack>

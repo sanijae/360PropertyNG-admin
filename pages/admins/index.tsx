@@ -16,46 +16,27 @@ import { adminImageURL } from 'utils/api';
 import { Delete, Edit } from '@mui/icons-material';
 import DeleteDialog from 'components/DeleteDialog';
 
+
 interface Column {
   id: 'imageUrl' | 'name' | 'email' | 'createdAt' | 'action';
   label: string;
   minWidth?: number;
   align?: 'right';
-  format?: (value: number) => string;
 }
-
-const columns: readonly Column[] = [
-  { id: 'imageUrl', label: 'Avatar', minWidth: 60 },
-  { id: 'name', label: 'name', minWidth: 100 },
-  {
-    id: 'email',
-    label: 'email',
-    minWidth: 100,
-    align: 'right',
-  },
-  {
-    id: 'createdAt',
-    label: 'Date Joined',
-    minWidth: 100,
-    align: 'right',
-  },
-  { id: 'action', label: 'Action', minWidth: 80, align: 'right' },
-];
 
 export default function Admins() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const dispatch: AppDispatch = useDispatch()
-  const {admins}  = useSelector((state: RootState)=>state.admins)
+  const dispatch: AppDispatch = useDispatch();
+  const { admins, currentAdmin } = useSelector((state: RootState) => state.admins);
   const [open, setOpen] = React.useState(false);
   const [adminId, setAdminId] = React.useState('');
 
-
   React.useEffect(() => {
-    dispatch(fetchAdmins())
-    window.document.title = "360PropertyNG - Admins"
-  },[dispatch])
-  
+    dispatch(fetchAdmins());
+    window.document.title = "360PropertyNG - Admins";
+  }, [dispatch]);
+
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -66,7 +47,7 @@ export default function Admins() {
   };
 
   const handleClickOpen = (id: any) => {
-    setAdminId(id)
+    setAdminId(id);
     setOpen(true);
   };
 
@@ -74,18 +55,25 @@ export default function Admins() {
     setOpen(false);
   };
 
+  const columns: readonly Column[] = [
+    { id: 'imageUrl', label: 'Avatar', minWidth: 60 },
+    { id: 'name', label: 'Name', minWidth: 100 },
+    { id: 'email', label: 'Email', minWidth: 100, align: 'right' },
+    { id: 'createdAt', label: 'Date Joined', minWidth: 100, align: 'right' },
+    ...(currentAdmin?.role === 'super-admin'
+      ? [{ id: 'action', label: 'Action', minWidth: 80, align: 'right' } as Column]
+      : [])
+  ];
+  
+
   return (
-    <PageContainer title='All Admins' buttonText='New Admin' navigate={'/admins/register'}>
-      <TableContainer sx={{background:'inherit', maxHeight: 440 }}>
+    <PageContainer title='All Admins' buttonText={currentAdmin?.role === 'super-admin' ? 'New Admin': ''} navigate={'/admins/register'}>
+      <TableContainer sx={{ background: 'inherit', maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {columns.map((column,i) => (
-                <TableCell
-                  key={i}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
+              {columns.map((column, i) => (
+                <TableCell key={i} align={column.align} style={{ minWidth: column.minWidth }}>
                   {column.label}
                 </TableCell>
               ))}
@@ -94,29 +82,38 @@ export default function Admins() {
           <TableBody>
             {admins
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((admin,i) => {
+              .map((admin, i) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={admin.id}>
-                     <TableCell key={i}>
-                        {admin.imageUrl ? <Avatar alt={admin.name} src={`${adminImageURL}/${admin._id}/${admin.imageUrl}`} /> : <Avatar/>}
-                      </TableCell>
-                      <TableCell key={i} >
-                        {admin.name}
-                      </TableCell>
-                      <TableCell key={i} align={'right'}>
-                        {admin.email}
-                      </TableCell>
-                      <TableCell key={i} align="right">
-                        {new Date(admin.createdAt).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell key={i} align="right">
-                        <IconButton aria-label="delete" size="small" onClick={()=>handleClickOpen(admin._id)}>
+                    <TableCell>
+                      {admin.imageUrl ? (
+                        <img
+                          width={40}
+                          height={40}
+                          src={admin.imageUrl}
+                          alt="Profile"
+                          style={{ borderRadius: '50%', objectFit: 'cover' }}
+                        />
+                      ) : (
+                        <Avatar />
+                      )}
+                    </TableCell>
+                    <TableCell>{admin.name}</TableCell>
+                    <TableCell align="right">{admin.email}</TableCell>
+                    <TableCell align="right">
+                      {new Date(admin.createdAt).toLocaleDateString()}
+                    </TableCell>
+                    {currentAdmin?.role === 'super-admin' && (
+                      <TableCell align="right">
+                        <IconButton
+                          aria-label="delete"
+                          size="small"
+                          onClick={() => handleClickOpen(admin._id)}
+                        >
                           <Delete fontSize="inherit" />
                         </IconButton>
-                        {/* <IconButton aria-label="edit" size="small">
-                          <Edit fontSize="inherit" />
-                        </IconButton> */}
                       </TableCell>
+                    )}
                   </TableRow>
                 );
               })}

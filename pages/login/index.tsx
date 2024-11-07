@@ -5,25 +5,22 @@ import {
   TextField, 
   Stack, 
   Alert, 
-  FormControl, 
-  InputLabel, 
-  Input, 
   IconButton, 
   Box, 
   Typography, 
   CircularProgress 
 } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
-import { Email, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import AuthLayout from "components/AuthLayout";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAdmins, loginAdmin } from "lib/features/admins/adminsSlices";
+import { loginAdmin } from "lib/features/admins/adminsSlices";
 import { RootState, AppDispatch } from "lib/store";
-import { resetError } from "lib/features/contacts/contactSlice";
+import Link from 'next/link';  // Import Link from Next.js
 
 interface LoginFormInputs {
   email: string;
@@ -39,7 +36,7 @@ const AdminLogin: React.FC = () => {
   const router = useRouter();
   const dispatch: AppDispatch = useDispatch();
   const [showPassword, setShowPassword] = React.useState(false);
-  const { admins, error, success, loading, isAuthenticated } = useSelector((state: RootState) => state.admins);
+  const { error, success, loading, isAuthenticated } = useSelector((state: RootState) => state.admins);
 
   const {
     register,
@@ -49,23 +46,18 @@ const AdminLogin: React.FC = () => {
     resolver: yupResolver(loginSchema),
   });
 
-  useEffect(()=> {
+  useEffect(() => {
     window.document.title = "360PropertyNG - Login"
-  })
+  });
 
-  useEffect(() =>{
-    if(isAuthenticated){
-      dispatch(resetError())
-      router.push('/')
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/');
     }
-  },[router, isAuthenticated])
+  }, [router, isAuthenticated]);
 
   const onSubmit: SubmitHandler<LoginFormInputs> = (data) => {
-    try {
-      dispatch(loginAdmin(data));
-    } catch (error: any) {
-      console.log(error.message);
-    }
+    dispatch(loginAdmin(data));
   };
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -99,7 +91,7 @@ const AdminLogin: React.FC = () => {
               {...register("email")}
               error={!!errors.email}
               helperText={errors.email?.message}
-              sx={{padding:'10px', my:'1em', }}
+              sx={{ padding: '10px', my: '1em' }}
             />
             <TextField
               label="Password"
@@ -110,7 +102,7 @@ const AdminLogin: React.FC = () => {
               {...register("password")}
               error={!!errors.password}
               helperText={errors.password?.message}
-              sx={{padding:'10px', my:'1em', }}
+              sx={{ padding: '10px', my: '1em' }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -125,6 +117,18 @@ const AdminLogin: React.FC = () => {
                 ),
               }}
             />
+
+            <Box textAlign="right">
+              <Link href="/forget-password" passHref>
+                <Typography
+                  variant="body2"
+                  color="primary"
+                  sx={{ cursor: 'pointer', textDecoration: 'underline' }}
+                >
+                  Forgot Password?
+                </Typography>
+              </Link>
+            </Box>
 
             <Button
               variant="contained"

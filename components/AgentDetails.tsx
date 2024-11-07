@@ -11,11 +11,11 @@ import { AppDispatch, RootState } from "lib/store";
 import { useRouter } from "next/router";
 import { deleteUser, fetchUsers } from "lib/features/users/userSlices";
 
-function AgentDetails({ id,name, role, email, phone, address, posts}: any) {
+function AgentDetails({ id,name, role,image, email, phone, address, posts}: any) {
   const router = useRouter();
   const [openDialog, setOpenDialog] = useState(false);
   const dispatch : AppDispatch = useDispatch()
-  const {success, error} = useSelector((state: RootState)=> state.admins)
+  const {currentAdmin} = useSelector((state: RootState)=> state.admins)
 
 
   const handleCloseDialog = () => {
@@ -50,16 +50,20 @@ function AgentDetails({ id,name, role, email, phone, address, posts}: any) {
           },
         }}
       >
-       <Image
-        src="/assets/male.png" 
-        alt={name}
-        width={200}
-        height={200}
-        style={{
-          borderRadius: "0.5rem",
-          objectFit: "cover",
-        }}
-      />
+      {image ? 
+      <img alt={name} src={image} />
+      :
+      <Image
+          src="/assets/male.png" 
+          alt={name}
+          width={200}
+          height={200}
+          style={{
+            borderRadius: "0.5rem",
+            objectFit: "cover",
+          }}
+        />
+      }
       </Box>
 
       <Stack direction="row" spacing="1.25rem" flex={1}>
@@ -90,6 +94,7 @@ function AgentDetails({ id,name, role, email, phone, address, posts}: any) {
               <Typography variant="body2">{role}</Typography>
             </Stack>
 
+            {currentAdmin?.role === 'super-admin' &&
             <Box>
               <IconButton
                 aria-label="open more"
@@ -99,7 +104,7 @@ function AgentDetails({ id,name, role, email, phone, address, posts}: any) {
               >
                 <Delete sx={{ color: "textSecondary.main" }} />
               </IconButton>
-            </Box>
+            </Box>}
           </Stack>
 
           <Box

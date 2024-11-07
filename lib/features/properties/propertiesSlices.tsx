@@ -58,7 +58,7 @@ const initialState: PostState = {
 export const fetchPosts = createAsyncThunk(
   "posts/fetchPosts",
   async (page: number) => {
-    const response = await api.get(`/Property/post/?page=${page}`);
+    const response = await api.get(`/Property/?page=${page}`);
     return response.data;
   }
 );
@@ -67,7 +67,7 @@ export const filterPosts = createAsyncThunk(
   "posts/filterPosts",
   async ({page, query}:{page: number, query: any}) => {
     const params = new URLSearchParams(query).toString();
-    const response = await api.get(`/Property/post/search?${params}`);
+    const response = await api.get(`/Property/search?${params}`);
     return response.data;
   }
 );
@@ -76,7 +76,7 @@ export const filterPosts = createAsyncThunk(
 export const createPost = createAsyncThunk(
   'posts/createPost',
   async ({ userId, postData }: { userId: string; postData: Omit<Post, 'id' | 'createdAt'> }) => {
-    const response = await api.post(`/Property/post/newPost/${userId}`, postData);
+    const response = await api.post(`/Property/newPost/${userId}`, postData);
     return response.data;
   }
 );
@@ -84,13 +84,13 @@ export const createPost = createAsyncThunk(
 export const updatePost = createAsyncThunk(
   'posts/updatePost',
   async ({ postId, postData }: { postId: string; postData: Partial<Post> }) => {
-    const response = await api.put(`/Property/post/${postId}`, postData);
+    const response = await api.put(`/Property/${postId}`, postData);
     return response.data;
   }
 );
 
 export const deletePost = createAsyncThunk('posts/deletePost', async (id: string) => {
-  await api.delete(`/Property/post/delete/${id}`);
+  await api.delete(`/Property/delete/${id}`);
   return id;
 });
 

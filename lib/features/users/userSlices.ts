@@ -12,6 +12,7 @@ interface User {
   address: string;
   imageUrl: string;
   title: string;
+  license: string;
   phone: number;
   posts:Posts[];
   isVerified: boolean;
@@ -19,6 +20,7 @@ interface User {
 
 interface UserState {
   users: User[];
+  user: User[];
   currentUser: User | null;
   loading: boolean;
   error: string | null;
@@ -26,6 +28,7 @@ interface UserState {
 
 const initialState: UserState = {
   users: [],
+  user: [],
   currentUser: null,
   loading: false,
   error: null,
@@ -41,6 +44,11 @@ export const loginUser = createAsyncThunk('user/login', async (credentials: { em
   return response.data;
 });
 
+export const fetchUser = createAsyncThunk('user/fetchUser', async (id: string) => {
+  const response = await api.get('/User/'+id);
+  return response.data;
+});
+
 export const fetchUsers = createAsyncThunk('user/fetchUsers', async () => {
   const response = await api.get('/User/');
   return response.data;
@@ -53,8 +61,8 @@ export const updateUser = createAsyncThunk('user/updateUser',
 });
 
 export const deleteUser = createAsyncThunk('user/deleteUser', async (id: string) => {
-  await api.delete(`/User/delete/${id}`);
-  return id;
+  const res = await api.delete(`/User/delete/${id}`);
+  return res.data;
 }); 
 
 // Create a slice
@@ -95,6 +103,10 @@ const userSlice = createSlice({
       })
       .addCase(fetchUsers.fulfilled, (state, action) => {
         state.users = action.payload.result; 
+        // state.count = action.payload.count;
+      })
+      .addCase(fetchUser.fulfilled, (state, action) => {
+        state.user = action.payload.result; 
         // state.count = action.payload.count;
       })
       .addCase(updateUser.fulfilled, (state, action) => {

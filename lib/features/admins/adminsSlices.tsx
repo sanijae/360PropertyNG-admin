@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from 'utils/api';
-
+import Cookies from 'js-cookie';
 interface Admin {
   id: string;
   _id: string;
+  role:string,
   name: string;
   email: string;
   address: string;
@@ -42,7 +43,6 @@ export const registerAdmin = createAsyncThunk('admin/register',
       return response.data;
     throw new Error("Invalid credentials");
   } catch (error: any) {
-    console.log(error.message);
     return rejectWithValue(error.message);
   }
 });
@@ -72,10 +72,9 @@ export const fetchAdminProfile = createAsyncThunk(
   "admin/fetchProfile",
   async (_, { rejectWithValue }) => {
     try {
-      const token = document.cookie.split("=")[1];
       const response = await api.post("/Admin/profile/",{}, {
         headers: {
-          Authorization: `${token}`,
+          Authorization: `Bearer ${Cookies.get('currentUser')}`,
           "Content-Type": "multipart/form-data",
         },
       });
@@ -91,7 +90,6 @@ export const fetchAdmin = createAsyncThunk(
   async (id:any, { rejectWithValue }) => {
     try {
       const response = await api.get(`/Admin/${id}`);
-      console.log(response.data);
       
       return response.data.result;
     } catch (error: any) {
