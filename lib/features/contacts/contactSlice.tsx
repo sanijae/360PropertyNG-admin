@@ -33,7 +33,7 @@ const initialState: ContactState = {
 export const fetchContacts = createAsyncThunk(
   'contacts/fetchContacts',
   async () => {
-    const response = await api.get('/Contact/');
+    const response = await api.get('/contact/');
     return response.data;
   }
 );
@@ -41,7 +41,7 @@ export const fetchContacts = createAsyncThunk(
 export const fetchContact = createAsyncThunk(
   'contacts/fetchContact',
   async (id:any) => {
-    const response = await api.get('/Contact/'+id);
+    const response = await api.get('/contact/'+id);
     return response.data;
   }
 );
@@ -49,7 +49,7 @@ export const fetchContact = createAsyncThunk(
 export const addContact = createAsyncThunk(
   'contacts/addContact',
   async (contactData: Contact) => {
-    const response = await api.post('/Contact/add', contactData);
+    const response = await api.post('/contact/add', contactData);
     return response.data;
   }
 );
@@ -57,7 +57,7 @@ export const addContact = createAsyncThunk(
 export const updateContact = createAsyncThunk(
   'contacts/updateContact',
   async ({ id, data }: { id: string; data: Partial<Contact> }) => {
-    const response = await api.put(`/Contact/update/${id}`, data);
+    const response = await api.put(`/contact/update/${id}`, data);
     return response.data;
   }
 );
@@ -65,7 +65,7 @@ export const updateContact = createAsyncThunk(
 export const deleteContact = createAsyncThunk(
   'contacts/deleteContact',
   async (id: string) => {
-    const response = await api.delete(`/Contact/delete/${id}`);
+    const response = await api.delete(`/contact/delete/${id}`);
     return response.data;
   }
 );

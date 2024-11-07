@@ -61,10 +61,10 @@ function DashboardCards() {
     const fetchData = async () => {
       try {
         const [citiesRes, sellRes, rentRes, usersRes] = await Promise.all([
-          api.get("/Property/cities"),
-          api.get("/Property/category/Sell"),
-          api.get("/Property/category/Rent"),
-          api.get("/User/"),
+          api.get("/property/cities"),
+          api.get("/property/category/Sell"),
+          api.get("/property/category/Rent"),
+          api.get("/user/"),
         ]);
         setAllData({
           cities: citiesRes.data.cities,

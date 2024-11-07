@@ -39,7 +39,7 @@ const initialState: AdminState = {
 export const registerAdmin = createAsyncThunk('admin/register',
    async (adminData: any, { rejectWithValue }) => {
   try {
-    const response = await api.post('/Admin/add', adminData);
+    const response = await api.post('/admin/add', adminData);
       return response.data;
     throw new Error("Invalid credentials");
   } catch (error: any) {
@@ -51,7 +51,7 @@ export const loginAdmin = createAsyncThunk(
   'admin/login',
   async (credentials: { email: string; password: string }, { rejectWithValue }) => {
     try {
-      const response = await api.post('/Admin/login', credentials);
+      const response = await api.post('/admin/login', credentials);
       if (response.data.result) {
         document.cookie = `currentUser=${response.data.token}; path=/; max-age=86400`;
         return response.data;
@@ -64,7 +64,7 @@ export const loginAdmin = createAsyncThunk(
 );
 
 export const fetchAdmins = createAsyncThunk('admin/fetchAdmins', async () => {
-  const response = await api.get('/Admin');
+  const response = await api.get('/admin');
   return response.data;
 });
 
@@ -72,7 +72,7 @@ export const fetchAdminProfile = createAsyncThunk(
   "admin/fetchProfile",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await api.post("/Admin/profile/",{}, {
+      const response = await api.post("/admin/profile/",{}, {
         headers: {
           Authorization: `Bearer ${Cookies.get('currentUser')}`,
           "Content-Type": "multipart/form-data",
@@ -89,7 +89,7 @@ export const fetchAdmin = createAsyncThunk(
   "admin/fetchAdmin",
   async (id:any, { rejectWithValue }) => {
     try {
-      const response = await api.get(`/Admin/${id}`);
+      const response = await api.get(`/admin/${id}`);
       
       return response.data.result;
     } catch (error: any) {
@@ -101,7 +101,7 @@ export const fetchAdmin = createAsyncThunk(
 export const updateAdmin = createAsyncThunk('profile/edit', 
   async ({admin, id}:{admin: Admin, id:any}, {rejectWithValue}) => {
    try {
-    const response = await api.put(`/Admin/update/${id}`, admin);
+    const response = await api.put(`/admin/update/${id}`, admin);
     return response.data;
    } catch (error: any) {
     rejectWithValue(error.message)
@@ -113,7 +113,7 @@ export const updateProfileImage = createAsyncThunk(
   async ({ id, formData }: {id:any, formData:FormData}, { rejectWithValue }) => {
     try {
       const token = document.cookie.split("=")[1];
-      const response = await api.put(`/Admin/update-profile-image/${id}`, formData, {
+      const response = await api.put(`/admin/update-profile-image/${id}`, formData, {
         headers: {
           Authorization: `${token}`,
           "Content-Type": "multipart/form-data",
@@ -133,7 +133,7 @@ export const updatePassword = createAsyncThunk(
   ) => {
     try {
       const token = document.cookie.split("=")[1];
-      const response = await api.put(`/Admin/updatePassword/${id}`, 
+      const response = await api.put(`/admin/updatePassword/${id}`, 
         { currentPassword, newPassword }, 
         {
           headers: {
@@ -149,7 +149,7 @@ export const updatePassword = createAsyncThunk(
 );
 
 export const deleteAdmin = createAsyncThunk('admin/deleteAdmin', async (id: string) => {
-  await api.delete(`/Admin/delete/${id}`);
+  await api.delete(`/admin/delete/${id}`);
   return id;
 });
 

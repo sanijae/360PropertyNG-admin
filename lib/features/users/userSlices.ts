@@ -35,33 +35,33 @@ const initialState: UserState = {
 };
 
 export const registerUser = createAsyncThunk('user/register', async (userData: Omit<User, 'id'>) => {
-  const response = await api.post('/User/register', userData);
+  const response = await api.post('/user/register', userData);
   return response.data;
 });
 
 export const loginUser = createAsyncThunk('user/login', async (credentials: { email: string; password: string }) => {
-  const response = await api.post('/User/login', credentials);
+  const response = await api.post('/user/login', credentials);
   return response.data;
 });
 
 export const fetchUser = createAsyncThunk('user/fetchUser', async (id: string) => {
-  const response = await api.get('/User/'+id);
+  const response = await api.get('/user/'+id);
   return response.data;
 });
 
 export const fetchUsers = createAsyncThunk('user/fetchUsers', async () => {
-  const response = await api.get('/User/');
+  const response = await api.get('/user/');
   return response.data;
 });
 
 export const updateUser = createAsyncThunk('user/updateUser', 
   async ({id, data}:{id:any,data:any}) => {
-  const response = await api.put(`/User/update-notes/${id}`, data);
+  const response = await api.put(`/user/update-notes/${id}`, data);
   return response.data;
 });
 
 export const deleteUser = createAsyncThunk('user/deleteUser', async (id: string) => {
-  const res = await api.delete(`/User/delete/${id}`);
+  const res = await api.delete(`/user/delete/${id}`);
   return res.data;
 }); 
 

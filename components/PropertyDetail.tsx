@@ -72,7 +72,7 @@ const PropertyDetail = () => {
 
   useEffect(() => {
     const fetchPost = async() => {
-        await api.get(`/Property/${id}`)
+        await api.get(`/property/${id}`)
             .then((res) => res.data)
             .then((data) => {
                 setPost(data.result)

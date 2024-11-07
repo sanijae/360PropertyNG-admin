@@ -1,19 +1,20 @@
 import axios from 'axios';
+// https://three60propertyapi.onrender.com
+export const imageURL = 'https://three60propertyapi.onrender.com/api/property/images'
+export const adminImageURL = 'https://three60propertyapi.onrender.com/api/property/admins'
+export const agentImageURL = 'https://three60propertyapi.onrender.com/api/property/users'
+export const licenseImageURL = 'https://three60propertyapi.onrender.com/api/property/license'
 
-export const imageURL = 'http://localhost:5000/Property/images'
-export const adminImageURL = 'http://localhost:5000/Property/admins'
-export const agentImageURL = 'http://localhost:5000/Property/users'
-export const licenseImageURL = 'http://localhost:5000/Property/license'
-
+// http://localhost:5000/api
 const api = axios.create({
-  baseURL: 'http://localhost:5000',
+  baseURL: 'https://three60propertyapi.onrender.com/api',
   headers: {
     'Content-Type': 'application/json',
   },
 });
-// http://localhost:5000/Admin/send-reset-link
-export const resetPassword=(data:any) =>  api.put('/Admin/resetPassword',data)
-export const sendResetLink=(data:any) =>  api.post('/Admin/send-reset-link',data)
-export const resetPasswordVerification=(token:any) =>  api.post('/Admin/reset-password-verification/'+token)
+// https://three60propertyapi.onrender.com/api/Admin/send-reset-link
+export const resetPassword=(data:any) =>  api.put('/admin/resetPassword',data)
+export const sendResetLink=(data:any) =>  api.post('/admin/send-reset-link',data)
+export const resetPasswordVerification=(token:any) =>  api.post('/admin/reset-password-verification/'+token)
 
 export default api;

@@ -26,7 +26,7 @@ const initialState: NotificationState = {
 export const fetchNotifications = createAsyncThunk(
   'notifications/fetchNotifications',
   async () => {
-    const response = await api.get(`/Notifications/`);
+    const response = await api.get(`/notifications/`);
     return response.data;
   }
 );
@@ -34,7 +34,7 @@ export const fetchNotifications = createAsyncThunk(
 export const fetchUserNotifications = createAsyncThunk(
   'notifications/fetchNotifications',
   async (userId: string) => {
-    const response = await api.get(`/Notifications/${userId}`);
+    const response = await api.get(`/notifications/${userId}`);
     return response.data;
   }
 );
@@ -42,7 +42,7 @@ export const fetchUserNotifications = createAsyncThunk(
 export const createNotification = createAsyncThunk(
   'notifications/createNotification',
   async (notificationData: Omit<Notification, 'id' | 'createdAt'>) => {
-    const response = await api.post('/Notifications/', notificationData);
+    const response = await api.post('/notifications/', notificationData);
     return response.data;
   }
 );
