@@ -130,13 +130,22 @@ function RatingComponent({ title, message, sender, _id, createdAt }: any) {
       {/* Profile Information Section */}
       <Stack direction="row" spacing="1rem" alignItems="center" bgcolor={'transparent'} padding={'10px'}
        sx={{width:{xs:'100%', md:'fit-content'}}}>
-        <Image
-          src="/assets/male.png"
-          alt={title}
-          width={70}
-          height={70}
-          style={{ borderRadius: "0.625rem" }}
-        />
+        {sender?.imageUrl ?
+          <img 
+            src={sender?.imageUrl} 
+            width={70}
+            height={70}
+            style={{ borderRadius: "0.625rem" }}
+          />
+          :
+          <Image
+            src="/assets/male.png"
+            alt={title}
+            width={70}
+            height={70}
+            style={{ borderRadius: "0.625rem" }}
+          />
+        }
 
         <Stack>
           <Typography variant="h6" sx={{ fontWeight: 600 }}>
